@@ -122,7 +122,7 @@ var config = {
 //			module: 'MMM-GoogleMapsTraffic',
 //			position: 'bottom_right',
 //			config: {
-//				key: 'AIzaSyAzW-RgnGXGfzFBZlu4u5FGM4Tq6g3OS68',
+//				key: '',
 //				lat: 36.1560,
 //				lng: -75.7480,
 //				height: '300px',
