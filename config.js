@@ -30,26 +30,73 @@ var config = {
 			     // false, default for all  NON-armv6l devices
 			     // true, force serveronly mode, because you want to.. no UI on this device
 	modules: [
-				{
-			module: "MMM-DarkSkyForecast",
-			header: "Weather",
-			position: "top_right",
-			classes: "default everyone",
-			disabled: false,
-			config: {
-				apikey: "",
-				latitude: "39.135820",
-				longitude: "-76.843580",
-				iconset: "2m",
-				concise: false,
-				units: "us",
-				showWind: false,
-				maxDailiesToShow: 7,
-				maxHourliesToShow: 4,
-				forecastLayout: "table",
-				hourlyForecastInterval: 2
-			}
-		},
+                {
+                  module: "MMM-OpenWeatherForecast",
+                  position: "top_right",
+                  header: "Forecast",
+                  config: {
+                    apikey: "REDACTED", //SUPER SECRET
+                    latitude: 39.135820,
+                    longitude: -76.843580,
+                    units: "imperial",
+                    iconset: "3c",
+                    colored: true,
+                    concise: true,
+                    requestDelay: "2000",
+                    showFeelsLikeTemp: true,
+		    useAnimatedIcons: false,
+
+                    showCurrentConditions: true,
+                    showSummary: true,
+                    showExtraCurrentConditions: true,
+                    extraCurrentConditions: {
+                      highLowTemp: true,
+                      precipitation: true,
+                      sunrise: true,
+                      sunset: true,
+                      wind: true,
+                      barometricPressure: false,
+                      humidity: true,
+                      dewPoint: false,
+                      uvIndex: true,
+                      visibility: false
+                    },
+
+                    forecastLayout: "table",
+                    forecastHeaderText: "",
+
+                    hourlyForecastTableHeaderText: "By the hour",
+                    showHourlyForecast: true,
+                    showHourlyTableHeaderRow: true,
+                    hourlyForecastInterval: 1,
+                    maxHourliesToShow: 4,
+                    hourlyExtras: {
+                      precipitation: true,
+                      wind: true,
+                      barometricPressure: false,
+                      humidity: false,
+                      dewPoint: false,
+                      uvIndex: false,
+                      visibility: false
+                    },
+
+                    dailyForecastTableHeaderText: "Throughout the week",
+                    showDailyForecast: true,
+                    showDailyTableHeaderRow: true,
+                    maxDailiesToShow: 7,
+                    dailyExtras: {
+                      precipitation: true,
+                      sunrise: false,
+                      sunset: false,
+                      wind: true,
+                      barometricPressure: false,
+                      humidity: false,
+                      dewPoint: false,
+                      uvIndex: false
+                    },
+
+                  }
+                },
 		{
 			module: "alert",
 		},
@@ -67,6 +114,7 @@ var config = {
 			position: "left",
 			fade: "false",
 			config: {
+				timeFormat: "dateheaders",
 				calendars: [
 					{
 						symbol: "beer",
@@ -80,26 +128,13 @@ var config = {
 				]
 			}
 		},
-		        // Regional - Zoomed out
-		{
-			module: "MMM-DarkSkyRadar",
-			position: "top_right",
-			header: "Radar",
-			config: {
-				lat: "39.135820",   // Latitude
-				lon: "-76.843580",  // Longitude
-				height: "300px",  //optional default of 600
-				//width: "350px",   //optional default
-				zoomLevel: 6,     //optional default of 6 (the larger the more zoomed in)
-				updateInterval: 5 * 60 * 1000,  //optional default (15 minutes) (min * sec * ms)
-			}
-		},
-		        // Home
+
+		// Local Traffic
 		{
 			module: 'MMM-GoogleMapsTraffic',
 			position: 'top_left',
 			config: {
-				key: '',
+				key: 'REDACTED',
 				lat: 39.135820,
 				lng: -76.843580,
 				height: '300px',
@@ -117,42 +152,60 @@ var config = {
 			},
 		},
 
-		// Outer Banks
-//		{
-//			module: 'MMM-GoogleMapsTraffic',
-//			position: 'bottom_right',
-//			config: {
-//				key: '',
-//				lat: 36.1560,
-//				lng: -75.7480,
-//				height: '300px',
-//				width: '350px',
-//				styledMapType: "standard",
-//				disableDefaultUI: true,
-//				zoom: 11,
-//				markers: [
-//					{
-//						lat: 36.1696,
-//						lng: -75.7552,
-//						fillColor: '#9966ff'
-//					},
-//				],
-//			},
-//		},
-		        // Closer - Zoomed in
+		// Weather Radar - regional
 		{
-			module: "MMM-DarkSkyRadar",
-			position: "top_left",
-			header: "Radar",
-			config: {
-				lat: "39.135820",   // Latitude
-				lon: "-76.843580",  // Longitude
-				height: "300px",  //optional default of 600
-				//width: "350px",   //optional default
-				zoomLevel: 9,     //optional default of 6 (the larger the more zoomed in)
-				updateInterval: 5 * 60 * 1000,  //optional default (15 minutes) (min * sec * ms)
-			}
-		},
+                  disabled: false,
+                  module: 'MMM-RAIN-RADAR',
+                  position: 'top_right',
+                  config: {
+                      useHeader: true, // true if you want a header
+                      lat: "39.135820", // Latitude
+                      lon: "-76.843580", // Longitude
+                      area: 'MD', // US State
+                      zoomLevel: 6,
+                      mapType: 3, //0-Road Map 1-Satellite 2-Dark Map 3-OpenStreetMaps 4-Light Map
+                      color: 3, //0-Original 1-Universal Blue 2-TITAN 3-The Weather Channel 5-NEXRAD Level-III 6-RAINBOW @ SELEX-SI
+                      snow: 1,
+                      smoothing: 1,
+                      opacity: 88,
+                      fastAnimation: 0,
+                      coverage: 0,
+                      darkTheme: 1,
+                      UTCtime: 0,
+                      legend: 1,
+                      legendMin: 0, //set legend to 1 if you want legendMin to show
+                      animate: 1,
+                      updateOnWarning: 0, // 1: after updateInterval, weather warnings for your US states will be used to determine if module should be hidden. 0 module is perpertually displayed
+                      updateInterval: 5 * 60 * 1000, // number of milliseconds. change 5 to 60 and it will update each 10 minutes
+                  }
+              },
+		// Weather Radar - local
+		{
+                  disabled: false,
+                  module: 'MMM-RAIN-RADAR',
+                  position: 'top_left',
+                  config: {
+                      useHeader: true, // true if you want a header
+                      lat: "39.135820", // Latitude
+                      lon: "-76.843580", // Longitude
+                      area: 'MD', // US State
+                      zoomLevel: 9,
+                      mapType: 3, //0-Road Map 1-Satellite 2-Dark Map 3-OpenStreetMaps 4-Light Map
+                      color: 3, //0-Original 1-Universal Blue 2-TITAN 3-The Weather Channel 5-NEXRAD Level-III 6-RAINBOW @ SELEX-SI
+                      snow: 1,
+                      smoothing: 1,
+                      opacity: 88,
+                      fastAnimation: 0,
+                      coverage: 0,
+                      darkTheme: 1,
+                      UTCtime: 0,
+                      legend: 1,
+                      legendMin: 0, //set legend to 1 if you want legendMin to show
+                      animate: 1,
+                      updateOnWarning: 0, // 1: after updateInterval, weather warnings for your US states will be used to determine if module should be hidden. 0 module is perpertually displayed
+                      updateInterval: 5 * 60 * 1000, // number of milliseconds. change 5 to 60 and it will update each 10 minutes
+                  }
+              },
 		{
 			module: "compliments",
 			//position: "lower_third",
@@ -162,72 +215,93 @@ var config = {
 			}
 		},
 
-		// COVID 19 Module
-		// States
-		// https://github.com/sdetweil/MyCovid19
-		{
-			module:"MyCovid19",
-			position:"bottom_left",
-			config:{
-				//countries:["Italy","USA","Australia","China","Spain","France"],
-				//OR
-				states:['Maryland','Mississippi'],
-				//OR
-				//counties [{'countyname':'statename'},{'countyname2':'statename2'}]
-				//note the ':' between the county and state name
+		//////COVID 19 Module
+		//////States
+		//////https://github.com/sdetweil/MyCovid19
+		////{
+		////	module:"MyCovid19",
+		////	position:"bottom_left",
+		////	config:{
+		////		//countries:["Italy","USA","Australia","China","Spain","France"],
+		////		//OR
+		////		states:['Maryland','Mississippi','Michigan','Texas','Florida','Colorado'],
+		////		//OR
+		////		//counties [{'countyname':'statename'},{'countyname2':'statename2'}]
+		////		//note the ':' between the county and state name
 
-				// one of countries or states or counties MUST be specified
+		////		// one of countries or states or counties MUST be specified
 
-				// line colors can be any definition of color either a name ,or a hex string
-				// one per country above, used in order,
-				line_colors:['red','white','green','yellow','blue'],
-				//
-				//chart_type:"cumulative_cases",  // or "cumulative deaths", or "cases" or "deaths"
-				chart_type:"cases",  // or "cumulative deaths", or "cases" or "deaths"
-				chart_title:"Cases Each Day", // however u want to label
-				// the vertical steps on the chart.. how tall u want it to be and how mant increments
-				ranges:{min:0,max:8000,stepSize:10000},
-				// size of the chart in pixels
-				width: 400,
-				height: 500,
-				// only used if we need to debug something
-				debug:false,
-			}
-		},
+		////		// line colors can be any definition of color either a name ,or a hex string
+		////		// one per country above, used in order,
+		////		line_colors:['red','white','green','yellow','blue','orange'],
+		////		//
+		////		//chart_type:"cumulative_cases",  // or "cumulative deaths", or "cases" or "deaths"
+		////		chart_type:"cases",  // or "cumulative deaths", or "cases" or "deaths"
+		////		chart_title:"Cases Each Day", // however u want to label
+		////		// the vertical steps on the chart.. how tall u want it to be and how mant increments
+		////		ranges:{min:0,max:8000,stepSize:1000},
+		////		// size of the chart in pixels
+		////		width: 400,
+		////		height: 500,
+		////		// only used if we need to debug something
+		////		debug:false,
+		////	}
+		////},
 
-		// COVID 19 Module
-		// Countries
-		// https://github.com/sdetweil/MyCovid19
-		{
-			module:"MyCovid19",
-			position:"bottom_right",
-			config:{
-				countries:["Italy","USA","Canada","UK"],
-				//OR
-				//states:['Maryland','Mississippi','New York','Texas'],
-				//OR
-				//counties [{'countyname':'statename'},{'countyname2':'statename2'}]
-				//note the ':' between the county and state name
+		////// COVID 19 Module
+		////// Countries
+		////// https://github.com/sdetweil/MyCovid19
+		////{
+		////	module:"MyCovid19",
+		////	position:"bottom_right",
+		////	config:{
+		////		countries:["Italy","USA","Canada","UK","India","Brazil"],
+		////		//OR
+		////		//states:['Maryland','Mississippi','New York','Texas'],
+		////		//OR
+		////		//counties [{'countyname':'statename'},{'countyname2':'statename2'}]
+		////		//note the ':' between the county and state name
 
-				// one of countries or states or counties MUST be specified
+		////		// one of countries or states or counties MUST be specified
 
-				// line colors can be any definition of color either a name ,or a hex string
-				// one per country above, used in order,
-				line_colors:['red','white','green','yellow','blue'],
-				//
-				//chart_type:"cumulative_cases",  // or "cumulative deaths", or "cases" or "deaths"
-				chart_type:"cases",  // or "cumulative deaths", or "cases" or "deaths"
-				chart_title:"Cases Each Day", // however u want to label
-				// the vertical steps on the chart.. how tall u want it to be and how mant increments
-				ranges:{min:0,max:8000,stepSize:10000},
-				// size of the chart in pixels
-				width: 400,
-				height: 500,
-				// only used if we need to debug something
-				debug:false,
-			}
-		}
+		////		// line colors can be any definition of color either a name ,or a hex string
+		////		// one per country above, used in order,
+		////		line_colors:['red','white','green','yellow','blue','purple'],
+		////		//
+		////		//chart_type:"cumulative_cases",  // or "cumulative deaths", or "cases" or "deaths"
+		////		chart_type:"cases",  // or "cumulative deaths", or "cases" or "deaths"
+		////		chart_title:"Cases Each Day", // however u want to label
+		////		// the vertical steps on the chart.. how tall u want it to be and how mant increments
+		////		ranges:{min:0,max:8000,stepSize:10000},
+		////		// size of the chart in pixels
+		////		width: 400,
+		////		height: 500,
+		////		// only used if we need to debug something
+		////		debug:false,
+		////	}
+		////}
 
+		// Fitbit
+                //{
+                //	module: 'MMM-fitbit',
+                //	position: 'bottom_center',
+                //	config: {
+                //		credentials: {
+		//	                client_id: "22BV7P",
+		//	                client_secret: "REDACTED",
+                //		},
+                //		resources: [
+                //			'steps',
+                //			'floors',
+                //			'caloriesOut',
+                //			'distance',
+                //			'activeMinutes',
+                //			//'sleep',
+                //			//'heart'
+                //		],
+                //		update_interval: 60
+		//	}
+                //},
 		//{
 		//	module: "newsfeed",
 		//	position: "bottom_bar",
